@@ -27,11 +27,12 @@ class User {
       if (password_verify($password, $rows['password'])) {
         $_SESSION['auth'] = 1;
         $_SESSION['username'] = ucwords($username);
+        $_SESSION['userid'] = $rows['id'];
         unset($_SESSION['failedAuth']);
         $this->logAttempt($username, "good");
         unset($_SESSION['last_submit_time']);
         header('Location: /home');
-        die;
+        
       } else {
         if(isset($_SESSION['failedAuth'])) {
           $_SESSION['failedAuth'] ++; //increment
@@ -45,10 +46,10 @@ class User {
 
           unset($_SESSION['failedAuth']);
           header('Location: /lock');
-          die;
+          
        }
         header('Location: /login');
-        die;
+        
     }
   }
   public function create($username, $password){
@@ -66,7 +67,7 @@ class User {
         $_SESSION['regError'] = 1; 
         $_SESSION['regMessage'] = "Username already exists";
         header('Location: /create');
-      die;
+      
     }else{
       // Check password security (minimum 8 characters, at least one uppercase letter, one lowercase       letter, and one number)
       if (preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/', $password)) {
@@ -80,7 +81,7 @@ class User {
             unset($_SESSION['regError']);
             header('Location: /login');
 
-            die;
+            
 
         }
       } else {
